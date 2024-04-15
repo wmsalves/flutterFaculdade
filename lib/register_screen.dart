@@ -83,8 +83,7 @@ class _RegisterFormState extends State<RegisterForm> {
             validator: (value) {
               return null;
             },
-            onSaved: (value) {
-            },
+            onSaved: (value) {},
           ),
           TextFormField(
             decoration: InputDecoration(labelText: 'Telefone'),

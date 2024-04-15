@@ -2,90 +2,68 @@ import 'package:flutter/material.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatelessWidget {
-  @override
+ @override
   Widget build(BuildContext context) {
+    // Controladores para os campos
+    TextEditingController emailController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Login'),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
+      body: Center(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            LoginForm(),
-            SizedBox(height: 20),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => RegisterScreen()),
-                );
-              },
-              child: Text('New here? Create an account'),
+          children: <Widget>[
+            Text(
+              'Digite seu e-mail e senha',
+              style: TextStyle(fontSize: 20),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class LoginForm extends StatefulWidget {
-  @override
-  _LoginFormState createState() => _LoginFormState();
-}
-
-class _LoginFormState extends State<LoginForm> {
-  final _formKey = GlobalKey<FormState>();
-  String? _email;
-  String? _password;
-
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          TextFormField(
-            decoration: InputDecoration(labelText: 'E-mail'),
-            keyboardType: TextInputType.emailAddress,
-            validator: (value) {
-              return null;
-            },
-            onSaved: (value) => _email = value,
-          ),
-          TextFormField(
-            decoration: InputDecoration(labelText: 'Senha'),
-            keyboardType: TextInputType.visiblePassword,
-            obscureText: true,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Por favor, digite a sua senha';
-              }
-              return null;
-            },
-            onSaved: (value) => _password = value,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: ElevatedButton(
+            SizedBox(height: 20),
+            TextField(
+              controller: emailController, // Controlador para e-mail
+              decoration: InputDecoration(labelText: 'E-mail'),
+            ),
+            TextField(
+              controller: passwordController, // Controlador para senha
+              decoration: InputDecoration(labelText: 'Senha'),
+              obscureText: true,
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
               onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Login realizado com sucesso!'),
-                    ),
+                String email = 'eu@gmail.com';
+                String password = '1234';
+                String enteredEmail = emailController.text; // Recuperar e-mail
+                String enteredPassword = passwordController.text; // Recuperar senha
+
+                if (enteredEmail != email || enteredPassword != password) {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text('Dados inválidos'),
+                        content: Text('Usuário e/ou senha incorreto(a)'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('OK'),
+                          ),
+                        ],
+                      );
+                    },
                   );
+                } else {
+                  Navigator.pushNamed(context, '/itemlist');
                 }
               },
               child: Text('Login'),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
